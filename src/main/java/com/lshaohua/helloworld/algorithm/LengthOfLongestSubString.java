@@ -2,15 +2,17 @@ package com.lshaohua.helloworld.algorithm;
 
 import io.micrometer.common.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class LengthOfLongestSubString {
 
     public static void main(String[] args) {
-        String str = "abc";
-        System.out.println("str.indexOf('b') = " + str.indexOf('b'));
-        System.out.println(lengthOfLongestSubstring2(str));
+        String str = "abcabcbb";
+        // System.out.println("str.indexOf('b') = " + str.indexOf('b'));
+        System.out.println(lengthOfLongestSubString(str));
     }
 
     public static int lengthOfLongestSubstring(String s) {
@@ -80,6 +82,25 @@ public class LengthOfLongestSubString {
         } else {
             return Math.max(right - chars[s.charAt(right - 1)], length);
         }
+    }
+
+    public static int lengthOfLongestSubString(String s) {
+        if (s == null || s.length() < 1) {
+            return 0;
+        }
+
+        Map<Character, Integer> char2Index = new HashMap<>();
+        int start = 0, tail = 1, longest = 1;
+        char2Index.put(s.charAt(0), 0);
+        while (tail < s.length() && start < tail) {
+            if (char2Index.containsKey(s.charAt(tail)) && char2Index.get(s.charAt(tail)) >= start) {
+                longest = Math.max(longest, tail - start);
+                start = char2Index.get(s.charAt(tail)) + 1;
+            }
+            char2Index.put(s.charAt(tail), tail);
+            tail++;
+        }
+        return Math.max(longest, tail - start);
     }
 
 }
