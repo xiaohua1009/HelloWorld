@@ -11,9 +11,28 @@ public class LongestPalindrome {
     }
 
     public static String longestPalindrome(String s) {
-        if (s == null || s.length() < 1) {
+        if (s == null || s.length() == 0) {
             return "";
         }
-        return "";
+        int head = 0;
+        int tail = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int oddLen = palindromeLen(s, i, i);
+            int evenLen = palindromeLen(s, i, i + 1);
+            int maxLen = Math.max(oddLen, evenLen);
+            if (maxLen > tail - head + 1) {
+                head = i - (maxLen - 1) / 2;
+                tail = i + maxLen / 2;
+            }
+        }
+        return s.substring(head, tail + 1);
+    }
+
+    private static int palindromeLen(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
     }
 }
